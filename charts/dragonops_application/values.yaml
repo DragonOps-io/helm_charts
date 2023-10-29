@@ -2,8 +2,6 @@ app:
   pod:
     port:
     healthCheckPath:
-    imageUrl:
-    imageTag:
   service:
     name:
     protocol: TCP
@@ -16,6 +14,11 @@ app:
       memory: "256Mi"
       cpu: "125m"
   secretName:
+
+image:
+  name:
+  tag:
+  url:
 
 iam:
   service_account_role: ""
