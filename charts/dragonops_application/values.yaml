@@ -3,6 +3,7 @@ app:
     port:
     healthCheckPath:
     imageUrl:
+    imageTag:
   service:
     name:
     protocol: TCP

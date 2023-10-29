@@ -18,7 +18,7 @@ spec:
       {{ end }}
       terminationGracePeriodSeconds: 30
       containers:
-        - image: "{{ .Values.app.pod.imageUrl }}"
+        - image: {{ .Values.app.pod.imageUrl }}:{{ .Values.app.pod.imageTag }}
           imagePullPolicy: Always
           name: {{ .Values.app.service.name }}
           ports:
