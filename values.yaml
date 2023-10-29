@@ -1,0 +1,21 @@
+app:
+  pod:
+    port:
+    healthCheckPath:
+    imageUrl:
+  service:
+    name:
+    protocol: TCP
+    port:
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "125m"
+    limits:
+      memory: "256Mi"
+      cpu: "125m"
+  secretName:
+
+iam:
+  service_account_role: ""
+  service_account_name: ""
