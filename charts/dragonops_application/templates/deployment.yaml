@@ -18,7 +18,7 @@ spec:
       {{ end }}
       terminationGracePeriodSeconds: 30
       containers:
-        - image: "{{ .Values.image.url }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        - image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           name: {{ .Values.app.service.name }}
           ports:
