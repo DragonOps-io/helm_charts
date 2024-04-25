@@ -24,5 +24,4 @@ iam:
   service_account_role: ""
   service_account_name: ""
 
-global:
-  stack_name: ""
+stack_name: ""
