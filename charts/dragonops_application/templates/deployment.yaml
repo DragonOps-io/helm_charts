@@ -13,6 +13,13 @@ spec:
       labels:
         app: {{ .Values.app.service.name }}
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: karpenter.sh/managed-by
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: {{ .Values.app.service.name }}
       {{- if .Values.iam.service_account_name }}
       serviceAccountName:  {{ .Values.iam.service_account_name }}
       {{ end }}
