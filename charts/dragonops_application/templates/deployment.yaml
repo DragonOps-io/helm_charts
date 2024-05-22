@@ -22,7 +22,17 @@ spec:
                     operator: In
                     values:
                       - {{ .Values.app.service.name }}
-              topologyKey: "topology.kubernetes.io/zone"
+              topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - {{ .Values.app.service.name }}
+                topologyKey: "topology.kubernetes.io/zone"
       {{- if .Values.iam.service_account_name }}
       serviceAccountName:  {{ .Values.iam.service_account_name }}
       {{ end }}
