@@ -3,7 +3,7 @@ entries:
   dragonops-app:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.744511-05:00"
+    created: "2024-05-21T20:27:54.761579-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 8b9958feff032512c5ef71a3b49f58e4a140cfe51801a674b9f26a93ea84f32c
@@ -15,7 +15,18 @@ entries:
   dragonops_application:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.745278-05:00"
+    created: "2024-05-21T20:27:54.762423-05:00"
+    description: The helm chart used to deploy applications as part of the DragonOps
+      ecosystem
+    digest: c26460f3de46c5be0fe4f488095508a9ed3583cc918a1ce1d317b23184b691fd
+    name: dragonops_application
+    type: application
+    urls:
+    - packages/dragonops_application-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2024-05-21T20:27:54.762288-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 1a2212128bd920fd355811280a2c6cdbd461b1199d40a3e530a6603324be46f8
@@ -26,7 +37,7 @@ entries:
     version: 0.1.10
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.747177-05:00"
+    created: "2024-05-21T20:27:54.764641-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: ac2ab3ecb8d131539d5527570f70bba8d2944387fc21a7c71d6238012dbff596
@@ -37,7 +48,7 @@ entries:
     version: 0.1.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.747051-05:00"
+    created: "2024-05-21T20:27:54.764392-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 74c058fe8e56fee0c94ec69a9f0a92deb4c790b26bdd108c70c6391bd0b0b66a
@@ -48,7 +59,7 @@ entries:
     version: 0.1.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.7468-05:00"
+    created: "2024-05-21T20:27:54.764147-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: ce3061d219d6483630257dcc0baa5464a61285c2c455567c5a75d85446e1b2c3
@@ -59,7 +70,7 @@ entries:
     version: 0.1.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.746526-05:00"
+    created: "2024-05-21T20:27:54.763883-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: a9d7739aa452d8e62e64c04079ae77211c9afe5c4688e651ebc68c77a909c83c
@@ -70,7 +81,7 @@ entries:
     version: 0.1.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.746273-05:00"
+    created: "2024-05-21T20:27:54.763521-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 802c3a958a5928e95e404f85faa4866a4cef31b350e824085144da9c33a39807
@@ -81,7 +92,7 @@ entries:
     version: 0.1.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.746039-05:00"
+    created: "2024-05-21T20:27:54.763262-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: c507032bc48e96225b260fb23934cfa8ed0a4a243de6b07111b44b9c87eea5a6
@@ -92,7 +103,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.745804-05:00"
+    created: "2024-05-21T20:27:54.762994-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 7507bab889670814111d9c9574c751b17361a1b4db856401b2053d74c784d1db
@@ -103,7 +114,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.745562-05:00"
+    created: "2024-05-21T20:27:54.762707-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 81b8f2e2b7fb408db8aafd2fbbdae62617226d325494371e03b97ad639712d46
@@ -114,7 +125,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.745127-05:00"
+    created: "2024-05-21T20:27:54.762153-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: 1aa6c163ef1d72a69c811ec6b710db6f7bba4a0543150b7a5a5244b24d992fe3
@@ -125,7 +136,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-05-21T20:15:19.744844-05:00"
+    created: "2024-05-21T20:27:54.761895-05:00"
     description: The helm chart used to deploy applications as part of the DragonOps
       ecosystem
     digest: a7febf247a36ebf78ac6bdaea7cdb5a405e6e0daab1f3f421daef1a677e12050
@@ -134,4 +145,4 @@ entries:
     urls:
     - packages/dragonops_application-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-21T20:15:19.743964-05:00"
+generated: "2024-05-21T20:27:54.761076-05:00"
