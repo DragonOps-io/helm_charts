@@ -76,7 +76,7 @@ spec:
             privileged: true
           env:
             - name: BEYLA_OPEN_PORT
-              value: {{ .Values.app.pod.port }}
+              value: "{{ .Values.app.pod.port }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://alloy.alloy.svc.cluster.local:4318"
             - name: BEYLA_KUBE_METADATA_ENABLE
