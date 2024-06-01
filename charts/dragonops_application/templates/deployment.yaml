@@ -37,6 +37,7 @@ spec:
       serviceAccountName:  {{ .Values.iam.service_account_name }}
       {{ end }}
       terminationGracePeriodSeconds: 30
+      shareProcessNamespace: true
       containers:
         - image: "{{ .Values.image.url }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
@@ -80,6 +81,6 @@ spec:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://alloy.alloy.svc.cluster.local:4318"
             - name: BEYLA_KUBE_METADATA_ENABLE
-              value: "true"
+              value: "false"
       restartPolicy: Always
 status: { }
