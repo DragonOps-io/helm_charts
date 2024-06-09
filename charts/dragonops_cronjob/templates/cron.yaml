@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  schedule: {{ .Values.app.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          {{- if .Values.iam.service_account_name }}
+          serviceAccountName: {{ .Values.iam.service_account_name }}
+          {{ end }}
+          containers:
+            - image: "{{ .Values.image.url }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+              imagePullPolicy: Always
+              name: {{ .Values.app.name }}
+              resources:
+                requests:
+                  memory: {{ .Values.app.resources.requests.memory }}
+                  cpu: {{ .Values.app.resources.requests.cpu }}
+                limits:
+                  memory: {{ .Values.app.resources.limits.memory }}
+                  cpu: {{ .Values.app.resources.limits.cpu }}
+              envFrom:
+                - secretRef:
+                    name: {{ .Values.app.secretName }}
+                {{- range .Values.app.database_secret_names_to_use }}
+                - secretRef:
+                    name: {{ . }}
+                {{- end }}
+              securityContext:
+                capabilities:
+                  drop:
+                    - all

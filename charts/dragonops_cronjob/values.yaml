@@ -1,12 +1,10 @@
 app:
+  name:
+  schedule:
   pod:
     initialCount: 2
     port:
     healthCheckPath:
-  service:
-    name:
-    protocol: TCP
-    port:
   resources:
     requests:
       memory: "256Mi"
