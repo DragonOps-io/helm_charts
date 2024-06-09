@@ -3,4 +3,4 @@ appVersion: 1.0.0
 description: The helm chart used to deploy cron jobs as part of the DragonOps ecosystem
 name: dragonops_cronjob
 type: application
-version: 0.1.2
+version: 0.1.3
