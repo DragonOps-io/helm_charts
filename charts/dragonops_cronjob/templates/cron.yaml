@@ -16,6 +16,7 @@ spec:
             - image: "{{ .Values.image.url }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
               imagePullPolicy: Always
               name: {{ .Values.app.name }}
+              command: {{ .Values.app.command }}
               resources:
                 requests:
                   memory: {{ .Values.app.resources.requests.memory }}
