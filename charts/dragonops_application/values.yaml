@@ -4,6 +4,9 @@ app:
     port:
     healthCheckPath:
   service:
+    observability:
+      enabled:
+      endpoint: ""
     name:
     protocol: TCP
     port:

@@ -83,7 +83,7 @@ spec:
             - name: BEYLA_OPEN_PORT
               value: "{{ .Values.app.pod.port }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://alloy.alloy.svc.cluster.local:4318"
+              value: "{{ .Values.app.service.observability.endpoint }}"
             - name: BEYLA_KUBE_METADATA_ENABLE
               value: "true"
       restartPolicy: Always
