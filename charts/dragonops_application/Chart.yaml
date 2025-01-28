@@ -3,4 +3,4 @@ appVersion: 1.0.0
 description: The helm chart used to deploy applications as part of the DragonOps ecosystem
 name: dragonops_application
 type: application
-version: 0.1.20
+version: 0.1.21
