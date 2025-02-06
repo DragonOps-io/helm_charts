@@ -107,8 +107,8 @@ spec:
                   fieldPath: spec.nodeName
           args: [ "--config=/etc/otel-collector-config.yaml" ]
           volumeMounts:
-            - name: otel-config
-              mountPath: /etc/otel-collector-config.yaml
+            - mountPath: /etc/otel-collector-config.yaml
+              name: otel-config
               subPath: otel-collector-config.yaml
         - name: fluent-bit
           image: fluent/fluent-bit:latest
@@ -125,14 +125,19 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config
-        - name: otel-config
-          configMap:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: collector.yaml
+                path: otel-collector-config.yaml
             name: otel-collector-config
+          name: otel-config
       restartPolicy: Always
 status: { }
 ---
 apiVersion: v1
 kind: ConfigMap
+immutable: false
 metadata:
   name: otel-collector-config
 data:
@@ -149,17 +154,9 @@ data:
         auth_type: serviceAccount
         endpoint: "https://${env:K8S_NODE_NAME}:10250"  # Talks to Kubelet
         insecure_skip_verify: true
-        metrics:
-          cpu.utilization:
-            enabled: true
-          memory.usage:
-            enabled: true
-          network.io:
-            enabled: true
-          filesystem.usage:
-            enabled: true
-          disk.io:
-            enabled: true
+        metric_groups:
+          - pod
+          - container
     processors:
       batch:
       resourcedetection:
@@ -190,6 +187,7 @@ data:
 ---
 apiVersion: v1
 kind: ConfigMap
+immutable: false
 metadata:
   name: fluent-bit-config
 data:
