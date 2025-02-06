@@ -80,11 +80,147 @@ spec:
           securityContext: # Privileges are required to install the eBPF probes
             privileged: true
           env:
+            - name: BEYLA_NETWORK_METRICS
+              value: "true"
+            - name: OTEL_TRACES_SAMPLER
+              value: "always_on"
+            - name: BEYLA_SERVICE_NAME
+              value: "{{ .Values.app.service.name }}"
             - name: BEYLA_OPEN_PORT
               value: "{{ .Values.app.pod.port }}"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "{{ .Values.app.service.observability.endpoint }}"
             - name: BEYLA_KUBE_METADATA_ENABLE
               value: "true"
+            - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+              value: "http://{{ .Values.app.service.observability.endpoint }}:4318/v1/metrics"
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: "http://{{ .Values.app.service.observability.endpoint }}:4318/v1/traces"
+        - name: otel-collector
+          image: otel/opentelemetry-collector-contrib:0.117.0
+          securityContext: # Privileges are required to install the eBPF probes
+            privileged: true
+          env:
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name={{ .Values.app.service.name }},deployment.environment={{ .Release.Namespace }}"
+            - name: K8S_NODE_NAME  # Needed for kubeletstats
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          args: [ "--config=/etc/otel-collector-config.yaml" ]
+          volumeMounts:
+            - name: otel-config
+              mountPath: /etc/otel-collector-config.yaml
+              subPath: otel-collector-config.yaml
+        - name: fluent-bit
+          image: fluent/fluent-bit:latest
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: fluent-bit-config
+              mountPath: /fluent-bit/etc/
+
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: fluent-bit-config
+          configMap:
+            name: fluent-bit-config
+        - name: otel-config
+          configMap:
+            name: otel-collector-config
       restartPolicy: Always
 status: { }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+data:
+  collector.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      kubeletstats:
+        collection_interval: 10s
+        auth_type: serviceAccount
+        endpoint: "https://${env:K8S_NODE_NAME}:10250"  # Talks to Kubelet
+        insecure_skip_verify: true
+        metrics:
+          cpu.utilization:
+            enabled: true
+          memory.usage:
+            enabled: true
+          network.io:
+            enabled: true
+          filesystem.usage:
+            enabled: true
+          disk.io:
+            enabled: true
+    processors:
+      batch:
+      resourcedetection:
+        detectors: [ env, eks ]
+    exporters:
+      otlp/metrics:
+        endpoint: {{ .Values.app.service.observability.endpoint }}:4317
+        tls:
+          insecure: true
+      otlp/traces:
+        endpoint: {{ .Values.app.service.observability.endpoint }}:4317
+        tls:
+          insecure: true
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+    service:
+      extensions: [health_check]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [resourcedetection,batch]
+          exporters: [otlp/traces]
+        metrics:
+          receivers: [otlp,awsecscontainermetrics]
+          processors: [resourcedetection,batch]
+          exporters: [otlp/metrics]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush 1
+        Log_Level info
+        Daemon Off
+        Parsers_File parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port 2020
+
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log  # Collect logs from all containers
+        Parser docker
+        Tag kube.*
+
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Kube_URL https://kubernetes.default.svc.cluster.local:443
+        Merge_Log On
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude Off
+
+    [OUTPUT]
+        Name loki
+        Match kube.*
+        Host http://{{ .Values.app.service.observability.endpoint}}
+        Port 3100
+        Labels app="{{.Values.app.service.name}}", environment="{{.Release.Name}}"
+        Auto_Kubernetes_Labels On
