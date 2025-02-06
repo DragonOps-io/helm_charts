@@ -108,7 +108,7 @@ spec:
           args: [ "--config=/etc/otel-collector-config.yaml" ]
           volumeMounts:
             - mountPath: /etc/otel-collector-config.yaml
-              name: otel-config
+              name: otel-config-v2
               subPath: otel-collector-config.yaml
         - name: fluent-bit
           image: fluent/fluent-bit:latest
@@ -130,8 +130,8 @@ spec:
             items:
               - key: collector.yaml
                 path: otel-collector-config.yaml
-            name: otel-collector-config
-          name: otel-config
+            name: otel-collector-config-v2
+          name: otel-config-v2
       restartPolicy: Always
 status: { }
 ---
@@ -139,7 +139,7 @@ apiVersion: v1
 kind: ConfigMap
 immutable: false
 metadata:
-  name: otel-collector-config
+  name: otel-collector-config-v2
 data:
   collector.yaml: |
     receivers:
