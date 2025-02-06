@@ -64,6 +64,12 @@ spec:
             limits:
               memory: {{ .Values.app.resources.limits.memory }}
               cpu: {{ .Values.app.resources.limits.cpu }}
+          env:
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.secretName }}
+                  key: OTEL_RESOURCE_ATTRIBUTES
           envFrom:
             - secretRef:
                 name: {{ .Values.app.secretName }}
