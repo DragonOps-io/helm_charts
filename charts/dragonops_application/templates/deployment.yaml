@@ -184,7 +184,7 @@ data:
           processors: [resourcedetection,batch]
           exporters: [otlp/traces]
         metrics:
-          receivers: [otlp,awsecscontainermetrics]
+          receivers: [otlp,kubeletstats]
           processors: [resourcedetection,batch]
           exporters: [otlp/metrics]
 ---
