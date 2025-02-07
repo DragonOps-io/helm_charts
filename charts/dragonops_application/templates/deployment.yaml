@@ -184,8 +184,10 @@ data:
           - pod
           - container
         metrics:
-          - k8s.pod.cpu_limit_utilization
-          - k8s.pod.memory_limit_utilization
+          k8s.pod.cpu_limit_utilization:
+            enabled: true
+          k8s.pod.memory_limit_utilization:
+            enabled: true
     processors:
       batch:
       resourcedetection:
