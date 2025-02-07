@@ -83,6 +83,13 @@ spec:
                 - all
         - name: beyla
           image: grafana/beyla:latest
+          resources:
+            requests:
+              memory: "512"
+              cpu: "256"
+            limits:
+              memory: "512"
+              cpu: "256"
           securityContext: # Privileges are required to install the eBPF probes
             privileged: true
           env:
@@ -104,6 +111,13 @@ spec:
           image: otel/opentelemetry-collector-contrib:0.117.0
           securityContext: # Privileges are required to install the eBPF probes
             privileged: true
+          resources:
+            requests:
+              memory: "512"
+              cpu: "256"
+            limits:
+              memory: "512"
+              cpu: "256"
           env:
             - name: OTEL_RESOURCE_ATTRIBUTES
               value: "service.name={{ .Values.app.service.name }},deployment.environment={{ .Release.Namespace }}"
@@ -111,19 +125,25 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          args: [ "--config=/etc/otel-collector-config.yaml" ]
+          args: [ "--feature-gates=receiver.kubeletstats.enableCPUUsageMetrics","--config=/etc/otel-collector-config.yaml" ]
           volumeMounts:
             - mountPath: /etc/otel-collector-config.yaml
-              name: otel-config-v2
+              name: otel-config
               subPath: otel-collector-config.yaml
         - name: fluent-bit
           image: fluent/fluent-bit:latest
+          resources:
+            requests:
+              memory: "512"
+              cpu: "256"
+            limits:
+              memory: "512"
+              cpu: "256"
           volumeMounts:
             - name: varlog
               mountPath: /var/log
             - name: fluent-bit-config
               mountPath: /fluent-bit/etc/
-
       volumes:
         - name: varlog
           hostPath:
@@ -136,8 +156,8 @@ spec:
             items:
               - key: collector.yaml
                 path: otel-collector-config.yaml
-            name: otel-collector-config-v2
-          name: otel-config-v2
+            name: otel-collector-config
+          name: otel-config
       restartPolicy: Always
 status: { }
 ---
@@ -145,7 +165,7 @@ apiVersion: v1
 kind: ConfigMap
 immutable: false
 metadata:
-  name: otel-collector-config-v2
+  name: otel-collector-config
 data:
   collector.yaml: |
     receivers:
@@ -163,6 +183,9 @@ data:
         metric_groups:
           - pod
           - container
+        metrics:
+          - k8s.pod.cpu_limit_utilization
+          - k8s.pod.memory_limit_utilization
     processors:
       batch:
       resourcedetection:
@@ -209,21 +232,12 @@ data:
 
     [INPUT]
         Name tail
-        Path /var/log/containers/*.log  # Collect logs from all containers
+        Path /var/log/pods/{{ .Release.Name}}_{{.Values.app.service.name}}-*/*/*.log
         Parser docker
-        Tag kube.*
-
-    [FILTER]
-        Name kubernetes
-        Match kube.*
-        Kube_URL https://kubernetes.default.svc.cluster.local:443
-        Merge_Log On
-        K8S-Logging.Parser On
-        K8S-Logging.Exclude Off
 
     [OUTPUT]
         Name loki
-        Match kube.*
+        Match *
         Host http://{{ .Values.app.service.observability.endpoint}}
         Port 3100
         Labels app="{{.Values.app.service.name}}", environment="{{.Release.Name}}"
