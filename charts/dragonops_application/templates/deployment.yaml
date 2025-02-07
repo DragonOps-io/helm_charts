@@ -188,6 +188,10 @@ data:
             enabled: true
           k8s.pod.memory_limit_utilization:
             enabled: true
+          k8s.pod.cpu_request_utilization:
+            enabled: true
+          k8s.pod.memory_request_utilization:
+            enabled: true
     processors:
       batch:
       resourcedetection:
@@ -222,6 +226,13 @@ immutable: false
 metadata:
   name: fluent-bit-config
 data:
+  parsers.conf: |
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
   fluent-bit.conf: |
     [SERVICE]
         Flush 1
