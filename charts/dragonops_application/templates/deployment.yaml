@@ -85,11 +85,11 @@ spec:
           image: grafana/beyla:latest
           resources:
             requests:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
             limits:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
           securityContext: # Privileges are required to install the eBPF probes
             privileged: true
           env:
@@ -113,11 +113,11 @@ spec:
             privileged: true
           resources:
             requests:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
             limits:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
           env:
             - name: OTEL_RESOURCE_ATTRIBUTES
               value: "service.name={{ .Values.app.service.name }},deployment.environment={{ .Release.Namespace }}"
@@ -134,11 +134,11 @@ spec:
           image: fluent/fluent-bit:latest
           resources:
             requests:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
             limits:
-              memory: "512"
-              cpu: "256"
+              memory: "256Mi"
+              cpu: "125m"
           volumeMounts:
             - name: varlog
               mountPath: /var/log
