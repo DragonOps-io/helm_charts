@@ -192,6 +192,8 @@ data:
             enabled: true
           k8s.pod.memory_request_utilization:
             enabled: true
+          k8s.pod.uptime:
+            enabled: true
     processors:
       batch:
       resourcedetection:
@@ -245,7 +247,7 @@ data:
 
     [INPUT]
         Name tail
-        Path /var/log/pods/{{ .Release.Name}}_{{.Values.app.service.name}}-*/*/*.log
+        Path /var/log/pods/{{ .Release.Namespace}}_{{.Values.app.service.name}}-*/*/*.log
         Parser docker
 
     [OUTPUT]
@@ -253,5 +255,5 @@ data:
         Match *
         Host http://{{ .Values.app.service.observability.endpoint}}
         Port 3100
-        Labels app="{{.Values.app.service.name}}", environment="{{.Release.Name}}"
+        Labels app="{{.Values.app.service.name}}", environment="{{.Release.Namespace}}"
         Auto_Kubernetes_Labels On
