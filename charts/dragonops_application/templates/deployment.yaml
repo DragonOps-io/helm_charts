@@ -71,11 +71,13 @@ spec:
               value: "127.0.0.1"
             - name: FLUENTD_PORT
               value: "24224"
+            {{- if .Values.app.service.observability.endpoint }}
             - name: OTEL_RESOURCE_ATTRIBUTES
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.app.secretName }}
                   key: OTEL_RESOURCE_ATTRIBUTES
+            {{ end }}
           envFrom:
             - secretRef:
                 name: {{ .Values.app.secretName }}
