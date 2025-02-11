@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+status: { }
 metadata:
   name: {{ .Values.app.service.name }}
 spec:
@@ -38,6 +39,7 @@ spec:
       {{ end }}
       terminationGracePeriodSeconds: 30
       shareProcessNamespace: true
+      restartPolicy: Always
       containers:
         - image: "{{ .Values.image.url }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
@@ -85,6 +87,7 @@ spec:
             capabilities:
               drop:
                 - all
+{{- if .Values.app.service.observability.endpoint }}
         - name: beyla
           image: grafana/beyla:latest
           resources:
@@ -142,8 +145,6 @@ spec:
                 path: otel-collector-config.yaml
             name: otel-collector-config
           name: otel-config
-      restartPolicy: Always
-status: { }
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -205,3 +206,4 @@ data:
           receivers: [otlp,kubeletstats]
           processors: [resourcedetection,batch]
           exporters: [otlp/metrics]
+{{ end }}
