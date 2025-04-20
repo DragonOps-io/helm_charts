@@ -145,14 +145,14 @@ spec:
             items:
               - key: collector.yaml
                 path: otel-collector-config.yaml
-            name: otel-collector-config
+            name: otel-collector-config-{{ .Values.app.service.name }}
           name: otel-config
 ---
 apiVersion: v1
 kind: ConfigMap
 immutable: false
 metadata:
-  name: otel-collector-config
+  name: otel-collector-config-{{ .Values.app.service.name }}
 data:
   collector.yaml: |
     receivers:
