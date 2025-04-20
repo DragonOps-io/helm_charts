@@ -51,13 +51,13 @@ spec:
               path: {{ .Values.app.pod.healthCheckPath }}
               port: {{ .Values.app.pod.port }}
             timeoutSeconds: 10
-            initialDelaySeconds: 10
+            initialDelaySeconds: {{ .Values.app.pod.initialHealthCheckDelay }}
           readinessProbe:
             httpGet:
               path: {{ .Values.app.pod.healthCheckPath }}
               port: {{ .Values.app.pod.port }}
             timeoutSeconds: 10
-            initialDelaySeconds: 10
+            initialDelaySeconds: {{ .Values.app.pod.initialHealthCheckDelay }}
             successThreshold: 2
           resources:
             requests:

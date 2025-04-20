@@ -3,6 +3,7 @@ app:
     initialCount: 2
     port:
     healthCheckPath:
+    initialHealthCheckDelay:
   service:
     observability:
       enabled:
