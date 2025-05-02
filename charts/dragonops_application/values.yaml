@@ -1,6 +1,7 @@
 app:
   pod:
-    initialCount: 2
+    min:
+    max:
     port:
     healthCheckPath:
     initialHealthCheckDelay:
