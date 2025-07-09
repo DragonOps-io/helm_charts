@@ -5,7 +5,7 @@ metadata:
   name: {{ .Values.app.service.name }}
 spec:
   replicas: {{ .Values.app.pod.min }}
-  progressDeadlineSeconds: 600
+  progressDeadlineSeconds: 300
   selector:
     matchLabels:
       app: {{ .Values.app.service.name }}
