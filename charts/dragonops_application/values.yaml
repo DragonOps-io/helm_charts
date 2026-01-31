@@ -1,11 +1,23 @@
 app:
+  account: ""
+  stack_name: ""
   pod:
     min:
     max:
     port:
     healthCheckPath:
     initialHealthCheckDelay:
+  autoscaling:
+    cpu:
+      enabled: false
+      metricType: Utilization
+      value: "50"
+    memory:
+      enabled: false
+      metricType: Utilization
+      value: "50"
   service:
+    formatted_dns_names: ""
     observability:
       enabled:
       endpoint: ""
@@ -26,9 +38,3 @@ image:
   name:
   tag:
   url:
-
-iam:
-  service_account_role: ""
-  service_account_name: ""
-
-stack_name: ""

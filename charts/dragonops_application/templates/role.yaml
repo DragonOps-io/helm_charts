@@ -1,0 +1,45 @@
+apiVersion: iam.services.k8s.aws/v1alpha1
+kind: Role
+metadata:
+  name: {{ .Values.app.stack_name }}
+spec:
+  name: {{ .Values.app.stack_name }}
+  inlinePolicies:
+     "{{ .Values.app.stack_name }}-inline-policy": |
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                  "Sid": "SecretsManagerReadAccess",
+                  "Action": [
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:ListSecrets",
+                    "secretsmanager:DescribeSecret"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+            ]
+        }
+  assumeRolePolicyDocument: |
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+              "Service": "pods.eks.amazonaws.com"
+          },
+          "Action": [
+              "sts:TagSession",
+              "sts:AssumeRole"
+          ]
+        }
+      ]
+    }
+  description: "IAM role managed by ACK created for {{ .Values.app.stack_name }}."
+  tags: # Optional
+    - key: Stack
+      value: {{ .Values.app.stack_name }}
+    - key: ManagedBy
+      value: ACK

@@ -1,0 +1,25 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.app.service.name }}-scaledobject
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    name: {{ .Values.app.service.name }}
+  minReplicaCount: {{ .Values.app.pod.min }}
+  maxReplicaCount: {{ .Values.app.pod.max }}
+  {{- if or .Values.app.autoscaling.cpu.enabled .Values.app.autoscaling.memory.enabled }}
+  triggers:
+  {{- if .Values.app.autoscaling.cpu.enabled }}
+  - type: cpu
+    metricType: {{ .Values.app.autoscaling.cpu.metricType }}
+    metadata:
+      value: {{ .Values.app.autoscaling.cpu.value | quote }}
+  {{- end }}
+  {{- if .Values.app.autoscaling.memory.enabled }}
+  - type: memory
+    metricType: {{ .Values.app.autoscaling.memory.metricType }}
+    metadata:
+      value: {{ .Values.app.autoscaling.memory.value | quote }}
+  {{- end }}
+  {{- end }}
