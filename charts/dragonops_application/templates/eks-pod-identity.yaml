@@ -6,5 +6,5 @@ metadata:
 spec:
   clusterName: {{ .Values.cluster_name }}
   namespace: {{ .Release.namespace }}
-  serviceAccount: {{ .Values.app.service.name }}
+  serviceAccount: {{ .Values.app.stack_name }}
   roleARN: arn:aws:iam::{{ .Values.app.account }}:role/{{ .Values.app.stack_name }}

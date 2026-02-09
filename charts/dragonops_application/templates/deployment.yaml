@@ -2,17 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 status: { }
 metadata:
-  name: {{ .Values.app.service.name }}
+  name: {{ .Values.app.stack_name }}
 spec:
   replicas: {{ .Values.app.pod.min }}
   progressDeadlineSeconds: 300
   selector:
     matchLabels:
-      app: {{ .Values.app.service.name }}
+      app: {{ .Values.app.stack_name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.app.service.name }}
+        app: {{ .Values.app.stack_name }}
     spec:
       affinity:
         podAntiAffinity:
@@ -22,7 +22,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - {{ .Values.app.service.name }}
+                      - {{ .Values.app.stack_name }}
               topologyKey: "kubernetes.io/hostname"
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 50
@@ -32,11 +32,9 @@ spec:
                     - key: app
                       operator: In
                       values:
-                        - {{ .Values.app.service.name }}
+                        - {{ .Values.app.stack_name }}
                 topologyKey: "topology.kubernetes.io/zone"
-      {{- if .Values.iam.service_account_name }}
-      serviceAccountName:  {{ .Values.iam.service_account_name }}
-      {{ end }}
+      serviceAccountName:  {{ .Values.app.stack_name }}
       terminationGracePeriodSeconds: 30
       shareProcessNamespace: true
       restartPolicy: Always
@@ -107,7 +105,7 @@ spec:
             - name: OTEL_TRACES_SAMPLER
               value: "always_on"
             - name: BEYLA_SERVICE_NAME
-              value: "{{ .Values.app.service.name }}"
+              value: "{{ .Values.app.stack_name }}"
             - name: BEYLA_OPEN_PORT
               value: "{{ .Values.app.pod.port }}"
             - name: BEYLA_KUBE_METADATA_ENABLE
@@ -129,7 +127,7 @@ spec:
               cpu: "125m"
           env:
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: "service.name={{ .Values.app.service.name }},deployment.environment={{ .Release.Namespace }}"
+              value: "service.name={{ .Values.app.stack_name }},deployment.environment={{ .Release.Namespace }}"
             - name: K8S_NODE_NAME  # Needed for kubeletstats
               valueFrom:
                 fieldRef:
@@ -145,14 +143,14 @@ spec:
             items:
               - key: collector.yaml
                 path: otel-collector-config.yaml
-            name: otel-collector-config-{{ .Values.app.service.name }}
+            name: otel-collector-config-{{ .Values.app.stack_name }}
           name: otel-config
 ---
 apiVersion: v1
 kind: ConfigMap
 immutable: false
 metadata:
-  name: otel-collector-config-{{ .Values.app.service.name }}
+  name: otel-collector-config-{{ .Values.app.stack_name }}
 data:
   collector.yaml: |
     receivers:

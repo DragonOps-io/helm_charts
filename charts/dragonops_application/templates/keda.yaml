@@ -1,11 +1,11 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: {{ .Values.app.service.name }}-scaledobject
+  name: {{ .Values.app.stack_name }}-scaledobject
   namespace: {{ .Release.Namespace }}
 spec:
   scaleTargetRef:
-    name: {{ .Values.app.service.name }}
+    name: {{ .Values.app.stack_name }}
   minReplicaCount: {{ .Values.app.pod.min }}
   maxReplicaCount: {{ .Values.app.pod.max }}
   {{- if or .Values.app.autoscaling.cpu.enabled .Values.app.autoscaling.memory.enabled }}
