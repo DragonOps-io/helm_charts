@@ -2,7 +2,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ .Values.app.service.name }}
-  namespace: {{ .Release.namespace }}
+  namespace: {{ .Values.app.namespace }}
   labels:
     traffic-type: external
 spec:

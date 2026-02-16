@@ -73,12 +73,12 @@ spec:
             - name: OTEL_RESOURCE_ATTRIBUTES
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.app.secretName }}
+                  name: {{ .Values.app.secret_name }}
                   key: OTEL_RESOURCE_ATTRIBUTES
             {{ end }}
           envFrom:
             - secretRef:
-                name: {{ .Values.app.secretName }}
+                name: {{ .Values.app.secret_name }}
             {{- range .Values.app.database_secret_names_to_use }}
             - secretRef:
                 name: {{ . }}
@@ -127,7 +127,7 @@ spec:
               cpu: "125m"
           env:
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: "service.name={{ .Values.app.stack_name }},deployment.environment={{ .Release.Namespace }}"
+              value: "service.name={{ .Values.app.stack_name }},deployment.environment={{ .Values.app.namespace }}"
             - name: K8S_NODE_NAME  # Needed for kubeletstats
               valueFrom:
                 fieldRef:

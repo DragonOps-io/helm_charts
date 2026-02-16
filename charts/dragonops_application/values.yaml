@@ -1,6 +1,10 @@
 app:
+  namespace: ""
+  secret_name: ""
+  aws_secret_name: ""
   account: ""
   stack_name: ""
+  database_secret_names_to_use:
   pod:
     min:
     max:
@@ -31,8 +35,6 @@ app:
     limits:
       memory: "256Mi"
       cpu: "125m"
-  secretName:
-  database_secret_names_to_use:
 
 image:
   name:
