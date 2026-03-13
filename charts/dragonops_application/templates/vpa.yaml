@@ -1,0 +1,23 @@
+{{- if .Values.app.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ .Values.app.stack_name }}-vpa
+  namespace: {{ .Values.app.namespace }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.app.stack_name }}
+  updatePolicy:
+    updateMode: {{ .Values.app.vpa.updateMode | quote }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: "app"
+        minAllowed:
+          cpu: {{ .Values.app.vpa.minAllowed.cpu }}
+          memory: {{ .Values.app.vpa.minAllowed.memory }}
+        maxAllowed:
+          cpu: {{ .Values.app.vpa.maxAllowed.cpu }}
+          memory: {{ .Values.app.vpa.maxAllowed.memory }}
+{{- end }}

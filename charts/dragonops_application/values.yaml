@@ -12,14 +12,16 @@ app:
     healthCheckPath:
     initialHealthCheckDelay:
   autoscaling:
-    cpu:
-      enabled: false
-      metricType: Utilization
-      value: "50"
-    memory:
-      enabled: false
-      metricType: Utilization
-      value: "50"
+    triggers: []  # Custom KEDA triggers (SQS, RPS, etc.)
+  vpa:
+    enabled: false
+    updateMode: "Off"  # "Off" = recommendations only, "Auto" = apply changes
+    minAllowed:
+      cpu: 50m
+      memory: 64Mi
+    maxAllowed:
+      cpu: 2
+      memory: 4Gi
   service:
     formatted_dns_names: ""
     observability:
