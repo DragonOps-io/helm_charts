@@ -87,16 +87,16 @@ spec:
             capabilities:
               drop:
                 - all
-{{- if .Values.app.service.observability.endpoint }}
+{{- if and .Values.app.service.observability.endpoint .Values.app.service.observability.sidecars.enabled }}
         - name: beyla
           image: grafana/beyla:latest
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "125m"
+              memory: "128Mi"
+              cpu: "50m"
             limits:
-              memory: "256Mi"
-              cpu: "125m"
+              memory: "128Mi"
+              cpu: "50m"
           securityContext: # Privileges are required to install the eBPF probes
             privileged: true
           env:
@@ -120,11 +120,11 @@ spec:
             privileged: true
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "125m"
+              memory: "128Mi"
+              cpu: "50m"
             limits:
-              memory: "256Mi"
-              cpu: "125m"
+              memory: "128Mi"
+              cpu: "50m"
           env:
             - name: OTEL_RESOURCE_ATTRIBUTES
               value: "service.name={{ .Values.app.stack_name }},deployment.environment={{ .Values.app.namespace }}"

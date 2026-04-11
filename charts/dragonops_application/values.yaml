@@ -27,6 +27,11 @@ app:
     observability:
       enabled:
       endpoint: ""
+      # Per-pod Beyla + OTEL collector sidecars. Defaults to true — set false
+      # for sub-prod apps to save ~250m CPU / 512Mi per pod. Sidecars are only
+      # rendered when both this flag is true AND endpoint is non-empty.
+      sidecars:
+        enabled: true
     name:
     protocol: TCP
     port:
